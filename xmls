@@ -1,0 +1,13 @@
+========================================================================================|
+		  Membre						  							Tache				|
+----------------------------------------------------------------------------------------|
+	1- Creer							 ||		6- Creer								|
+	2- Modifier							 ||		7- Modifier								|
+	3- afficher							 ||		8- afficher								|
+	4- Spprimer							 ||		9- Spprimer								|
+	5- rechercher(afficher sous critere) ||		10- rechercher(afficher sous critere)	|
+----------------------------------------------------------------------------------------|
+			A- Assigner une tâche à un membre											|
+			B- Afficher la liste des tâches assignées à un membre						|
+----------------------------------------------------------------------------------------|
+												

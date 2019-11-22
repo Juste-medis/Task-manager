@@ -1,0 +1,35 @@
+# depslib dependency file v1.0
+1573259989 source:c:\users\medis adido\documents\codeblock\genie logiciel\task_manager\src\membre.cpp
+	"membre.h"
+
+1573081997 c:\users\medis adido\documents\codeblock\genie logiciel\task_manager\include\membre.h
+	<iostream>
+	<string>
+	<tache.h>
+	<list>
+
+1573517876 c:\users\medis adido\documents\codeblock\genie logiciel\task_manager\include\tache.h
+	<iostream>
+	<string>
+
+1573754742 source:c:\users\medis adido\documents\codeblock\genie logiciel\task_manager\src\tache.cpp
+	"tache.h"
+	<sstream>
+	<string>
+	<cstdlib>
+
+1574370457 source:c:\users\medis adido\documents\codeblock\genie logiciel\task_manager\main.cpp
+	<iostream>
+	<membre.h>
+	<tache.h>
+	<conio.h>
+	<windows.h>
+	<string>
+	<list>
+	<iterator>
+	<algorithm>
+	<cstring>
+	<sstream>
+	<stdlib.h>
+	<fstream>
+

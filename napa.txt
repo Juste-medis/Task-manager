@@ -1,0 +1,3 @@
+"C:\Program Files\AVAST Software\Avast\setup\instup.exe"
+"C:\Program Files\Common Files\microsoft shared\ClickToRun\OfficeClickToRun.exe"
+"C:\Windows\System32\svchost.exe"
