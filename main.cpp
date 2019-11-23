@@ -78,14 +78,14 @@ int main()
 {
     n_time();
 
-    //on recupere les occurences deja cree dans la base de donnée(fichier)
+    //on recupere les occurences deja cree dans la base de donnÃ©e(fichier)
     maj_members();
     maj_tache() ;
     //fin de recuperation
 
     system("color 4F");
     //respectivement le username , le pass , reponse a l'accueil ,
-    /*
+
     string login("") ;
     string password("") ;
     cout <<"Bonjour Monsieur/Madamme . Veillez vous identifiez s'il vous plait ! " <<endl ;
@@ -126,7 +126,7 @@ if(login != "admin" || password != "toto")
     main() ;
     exit(0) ;
 }
-*/
+
 int si_dej (0);
 do
 {
@@ -288,7 +288,7 @@ void creer_membre()
     if(tel == "") tel = "inconnu" ;
     while (!is_number(tel)|| tel.size()<8 )
     {
-        cout<<"numero de telephone invalide (8 chiffre min indicatif precisé par : 00#### ex : 00229 pour le Benin ): " ;
+        cout<<"numero de telephone invalide (8 chiffre min indicatif precisÃ© par : 00#### ex : 00229 pour le Benin ): " ;
         getline(cin ,tel) ;
     }
 
@@ -1049,7 +1049,7 @@ string varId;
              {
                  if (it->get_tache() == "inconnu") it -> set_tache("") ;
                  string newtache = it->get_tache()+" " ;
-                 //on verifie si la tache n'est pas deja assignée
+                 //on verifie si la tache n'est pas deja assignÃ©e
                  size_t found = newtache.find(tache_nom);
                  if (found != string::npos)
                     cout <<"ce membre a deja une tache de ce nom ! " <<endl;
@@ -1058,7 +1058,7 @@ string varId;
                 {
                     newtache += tache_nom ;
                     it -> set_tache(newtache) ;
-                    cout<<"tache assignée avec suces ! " <<endl ;
+                    cout<<"tache assignÃ©e avec suces ! " <<endl ;
                 }
 
              }
@@ -1213,7 +1213,7 @@ string varId;
         {ret2 = true ; break ;}
         if(ret2 == false)
         {
-            cout << "saisie invalide ! choisissez un numero valide indiqué dans le menu : "<<endl ;
+            cout << "saisie invalide ! choisissez un numero valide indiquÃ© dans le menu : "<<endl ;
             cin >> rep_acu ;
         }
         }
@@ -1582,7 +1582,7 @@ void rech_eta(list<tache> &list1 , list<tache> &list2,string etat,string &rec)
 }
 void n_time()
     {
-    //on verifie si ç'est la premiere execution du fichier pour enooncer les conditions d'itulisation
+    //on verifie si Ã§'est la premiere execution du fichier pour enooncer les conditions d'itulisation
     string mbr_file("Membres.txt");
     string tche_file("Taches.txt");
     string condi_file("condi.txt");
