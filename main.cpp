@@ -1,6 +1,11 @@
+/*
+TASK MANAGER 1.0.0
+
+*/
 #include <iostream>
 #include <membre.h>
 #include <tache.h>
+#include <Values.h>
 #include <conio.h>
 #include <windows.h>
 #include <string>
@@ -11,12 +16,11 @@
 #include <sstream>
 #include <stdlib.h>
 #include <fstream>
-
-
 using namespace std;
 //variable
 list<membre> members ;
 list<tache> tasks ;
+Values value ;
 //pour la recherche
 list<membre> members1 ;
 list<membre> members2 ;
@@ -46,7 +50,6 @@ string rep_acu,maVariable,maVariable_Tache;
 //verifions
 void verify(string cas);
 //controlleurs de membre
-string afficher_accueil();
 void creer_membre() ;
 void modifier_membre() ;
 string afficher_membre() ;
@@ -76,16 +79,13 @@ string const s_tache("Taches.txt");
 
 int main()
 {
+    //pour verifier si l'administrateur a deja installé l'applicaation : si oui oui ,il se connecte , si non on lui affiches les terme et contitions
     n_time();
-
-    //on recupere les occurences deja cree dans la base de donnée(fichier)
+    //on recupere les occurences deja cree dans la base de donnée(fichier) dans les listes principales
     maj_members();
     maj_tache() ;
-    //fin de recuperation
-
     system("color 4F");
     //respectivement le username , le pass , reponse a l'accueil ,
-
     string login("") ;
     string password("") ;
     cout <<"Bonjour Monsieur/Madamme . Veillez vous identifiez s'il vous plait ! " <<endl ;
@@ -126,7 +126,7 @@ if(login != "admin" || password != "toto")
     main() ;
     exit(0) ;
 }
-
+//quand la connexion a reuissie
 int si_dej (0);
 do
 {
@@ -135,7 +135,7 @@ do
         cout <<"connexion reuissie !\n\n" <<endl ;
     si_dej++ ;
     }
-    cout << afficher_accueil() ;
+    cout<< value.afficher_accueil();
     cout <<"Indiquez une operation par son numero \n \t > " ;
     cin>>rep_acu ;
     verify("rep_acu");
@@ -203,31 +203,7 @@ do
 }while(autre_tache);
     return 0 ;
 }
-//affichons l'accueil
-string afficher_accueil()
-{
-    string str ;
-    str =  "+=======================================================================================================+\n";
-    str += "|                                             MENU PRINCIPAL                                            |\n";
-    str += "|-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-|\n";
-    str += "|                                                                                                       |\n";
-    str += "|                          Membre                                            Tache                      |\n";
-    str += "|-------------------------------------------------------------------------------------------------------|\n";
-    str += "|   1- Creer                                          ||     6- Creer                                   |\n";
-    str += "|   2- Modifier                                       ||     7- Modifier                                |\n";
-    str += "|   3- afficher                                       ||     8- afficher                                |\n";
-    str += "|   4- Spprimer                                       ||     9- Spprimer                                |\n";
-    str += "|   5- rechercher/afficher sous critere(s)            ||     10- rechercher/afficher sous critere(s)    |\n";
-    str += "|                                                                                                       |\n";
-    str += "|-------------------------------------------------------------------------------------------------------|\n";
-    str += "|                                      11- Assigner une tache a un membre                               |\n";
-    str += "|                                      12- Afficher la liste des taches assignees a un membre           |\n";
-    str += "|                                      13- Quitter                                                      |\n";
-    str += "|-------------------------------------------------------------------------------------------------------|\n";
-    str += "|-------------------------------------------------------------------------------------------------------|\n";
-    str += "+-------------------------------------------------------------------------------------------------------+\n";
-    return str ;
-}
+
 string afficher_membre()
 {
 list<membre>::iterator it = members.begin();
@@ -282,10 +258,11 @@ void creer_membre()
     {
         ID = inst_id ;
 //-------Verification--------
-    cout <<"  Nom : "; getline(cin, nom) ;
-    cout <<"  Prenom : ";getline(cin, prenom) ;
+    cout <<"  Nom : "; getline(cin, nom) ;if(nom == "") nom = "inconnu" ;
+    cout <<"  Prenom : ";getline(cin, prenom) ;if(prenom == "") prenom = "inconnu" ;
     cout <<"  tel : "; getline(cin, tel) ;
     if(tel == "") tel = "inconnu" ;
+    else
     while (!is_number(tel)|| tel.size()<8 )
     {
         cout<<"numero de telephone invalide (8 chiffre min indicatif precisé par : 00#### ex : 00229 pour le Benin ): " ;
@@ -311,7 +288,7 @@ void modifier_membre()
 {
 string rep;
  string varId;
-  cout << "Avez vous des informations par rapport au membre a modifier? (1-oui 0-non) "<<endl;
+  cout << "Avez vous des informations par rapport au membre a modifier? (1-oui 0-non) ";
   cin>>rep;
    while (!is_number(rep) || rep != "1" && rep != "0")
   {
@@ -416,8 +393,10 @@ void supprimer_membre ()
     if (RS =="1" )
     {
        rechercher_membre();
-          cout<< "veillez entrer l'ID du membre a supprimer" <<endl;
-         cin>> nouId;
+       if(!maVariable.empty())
+       {
+        cout<< "veillez entrer l'ID du membre a supprimer" <<endl;
+        cin>> nouId;
        list<membre>::iterator it ;
        for( it=members.begin(); it != members.end() ; ++it )
            {
@@ -429,6 +408,7 @@ void supprimer_membre ()
              }
              }
         if (RS!="yes") cout <<"suppression non effectuee , ID introuvable " <<endl ;
+       }
     } else
     {
     cout << afficher_membre();
@@ -819,6 +799,7 @@ cout<<afficher_tache()<<endl;
         while (!is_in_date_format(dbu))
         {
             cout<<"date invalide ! (jj/mm/aa/) : " ;
+            cin.ignore();
             getline(cin,dbu) ;
         }
     it->set_tache_date_debut(dbu) ;
@@ -1020,13 +1001,28 @@ string varId;
       rechercher_membre();
       if (!maVariable.empty())
         {
-        cout<< "Precisez l'ID du concerne \n ID : "<<endl;
+        cout<< "Precisez l'ID du concerne \n ID : ";
         cin>>varId;
- list<tache>::iterator it ;
-       for( it=tasks.begin(); it != tasks.end() ; ++it )
+        list<membre>::iterator it ;
+        for( it=members.begin(); it != members.end() ; ++it )
            {
-             if(tache_id ==(it -> get_tache_id()))
-                tache_nom = it -> get_tache_nom() ;
+             if(varId ==(it -> get_ID()))
+             {
+                rep= "yes" ;
+             }
+        }
+        if (rep !="yes" )
+                                cout <<"membre introuvable ! "<<endl ;
+        else
+        rechercher_tache();
+        cout<< "Precisez nous l'ID de la tache a assigner : ";
+        cin>>tache_id;
+
+        list<tache>::iterator ita ;
+        for( ita=tasks.begin(); ita != tasks.end() ; ++ita )
+           {
+             if(tache_id ==(ita -> get_tache_id()))
+                tache_nom = ita -> get_tache_nom() ;
            }
            if(tache_nom.empty())
            {
@@ -1213,7 +1209,7 @@ string varId;
         {ret2 = true ; break ;}
         if(ret2 == false)
         {
-            cout << "saisie invalide ! choisissez un numero valide indiqué dans le menu : "<<endl ;
+            cout << "saisie invalide ! choisissez un numero valide indiqué dans le menu > " ;
             cin >> rep_acu ;
         }
         }
@@ -1599,8 +1595,8 @@ void n_time()
             if(line%40==0)
             {
 cout<<"                                                                                                          ____________ "<<endl ;
-cout<<"                                                                                                         |   SUIVANT  | "<<endl ;
-cout<<"                                                                                                         |____________|  "<<endl ;
+cout<<"                                                                                                         |   SUIVANT  |"<<endl ;
+cout<<"                                                                                                         |____________|"<<endl ;
             getline(cin,lina) ;
             }
             line ++ ;
@@ -1617,13 +1613,7 @@ cout<<"                                                                         
                 }
                 if(rep == "1")
                 {
-cout <<"_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n";
-cout <<"|                                                                                                                                            |\n";
-cout <<"----------------------------------------------------------------------------------------------------------------------------------------------\n";
-cout <<"|                                            T  A  S  K       M  A  N  A G  E  R     1.0.0                                                   |\n";
-cout <<"----------------------------------------------------------------------------------------------------------------------------------------------\n";
-cout <<"|                                                                                                                                            |\n";
-cout <<"_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n";
+                    cout <<value.cadran_depart();
             system("echo .>Membres.txt") ;
             system("echo .>Taches.txt") ;
                 }
