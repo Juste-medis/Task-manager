@@ -47,6 +47,7 @@ void rech_eta(list<tache> &list1 , list<tache> &list2,string etat,string &rec) ;
 //------------
 bool autre_tache ;
 string rep_acu,maVariable,maVariable_Tache;
+int tentative = 3 ;bool failed_login(true) ;
 //verifions
 void verify(string cas);
 //controlleurs de membre
@@ -72,60 +73,24 @@ void maj_members();
 void maj_tache();
 bool is_readable(const string &file) ;
 void n_time();
+void connexion();
 //-------------------------------
 string const s_membre("Membres.txt");
 string const s_tache("Taches.txt");
-
 
 int main()
 {
     //pour verifier si l'administrateur a deja installé l'applicaation : si oui oui ,il se connecte , si non on lui affiches les terme et contitions
     n_time();
-    //on recupere les occurences deja cree dans la base de donnée(fichier) dans les listes principales
+    //on recupere les occurences deja cree dans la base de donnée(fichiers Membres et tache) si eventuellement ils existent et on
+    //les affecte dans les listes principales
     maj_members();
     maj_tache() ;
     system("color 4F");
     //respectivement le username , le pass , reponse a l'accueil ,
-    string login("") ;
-    string password("") ;
     cout <<"Bonjour Monsieur/Madamme . Veillez vous identifiez s'il vous plait ! " <<endl ;
-    cout <<"Identifiant : ";
-    getline(cin, login);
-    cout <<"Mot de passe : " ;
-    int x[200] ;
-for(int i=0; i<200;i++)
-{
-x[i]=getch();
-if(x[i]!='\r')
-    cout<<"*";
-if(x[i]=='\r')
-break;
- else if(x[i]=='\b')
-{
-if(i==0)
-cout<<"\b"<<" "<<"\b";
-else if(i>=1)
-{
-//x[i-1]='\0';
-//make the previous byte null if backspase is pressed
- i=i-2;
-cout<<"\b"<<" "<<"\b\b"<<" "<<"\b";
- }
-}
-password +=x[i] ;
-}
-cout <<endl ;
-
-int nbr = 3 ;
-
-if(login != "admin" || password != "toto")
-{
-    nbr -- ;
-    cout<<endl ;
-    cout << "echec de la connexion . utilisateur ou mot de passe incorrect ! reesayez plus tard ! " <<endl ;
-    main() ;
-    exit(0) ;
-}
+    while(failed_login)
+    connexion() ;
 //quand la connexion a reuissie
 int si_dej (0);
 do
@@ -1014,10 +979,26 @@ string varId;
         if (rep !="yes" )
                                 cout <<"membre introuvable ! "<<endl ;
         else
-        rechercher_tache();
-        cout<< "Precisez nous l'ID de la tache a assigner : ";
-        cin>>tache_id;
-
+        {
+            cout<< "\n\t\t 1- choisir une tache 2- Recherche une tache :  ";
+        cin >>rep ;
+        while (!is_number(rep) || rep != "1" && rep != "2")
+                {
+                    if (!is_number(rep)) cout<<"saisie invalide ! ";
+                    else if (rep != "1" && rep != "2") cout <<"veillez saisir 1 ou 0 " ;
+                    cin>>rep ;
+                }
+        if (rep == "1")
+        {
+            cout<<afficher_tache() ;
+            cout<<"renseignez nous l'id de la tache : ";
+              cin>>tache_id;
+        }else
+        {
+            rechercher_tache() ;
+            cout<<"renseignez nous l'id de la tache : ";
+              cin>>tache_id;
+        }
         list<tache>::iterator ita ;
         for( ita=tasks.begin(); ita != tasks.end() ; ++ita )
            {
@@ -1047,8 +1028,11 @@ string varId;
                  string newtache = it->get_tache()+" " ;
                  //on verifie si la tache n'est pas deja assignée
                  size_t found = newtache.find(tache_nom);
-                 if (found != string::npos)
+                  if (found != string::npos)
+                 {
                     cout <<"ce membre a deja une tache de ce nom ! " <<endl;
+                    break ;
+                 }
                  //fin de verification
                 else
                 {
@@ -1060,6 +1044,7 @@ string varId;
              }
            }
    }
+        }
    }
    }else
    {
@@ -1080,9 +1065,25 @@ string varId;
             cout <<"membre introuvable ! "<<endl ;
         else
         {
-        cout<< "Precisez nous l'ID de la tache a assigner : ";
-        cin>>tache_id;
-
+        cout<< "\n\t\t 1- choisir une tache  2- Recherche une tache >  ";
+        cin >>rep ;
+        while (!is_number(rep) || rep != "1" && rep != "2")
+                {
+                    if (!is_number(rep)) cout<<"saisie invalide ! ";
+                    else if (rep != "1" && rep != "2") cout <<"veillez saisir 1 ou 0 " ;
+                    cin>>rep ;
+                }
+        if (rep == "1")
+        {
+            cout<<afficher_tache() ;
+            cout<<"renseignez nous l'id de la tache : ";
+              cin>>tache_id;
+        }else
+        {
+            rechercher_tache() ;
+            cout<<"renseignez nous l'id de la tache : ";
+              cin>>tache_id;
+        }
         list<tache>::iterator it ;
         for( it=tasks.begin(); it != tasks.end() ; ++it )
            {
@@ -1103,16 +1104,25 @@ string varId;
                 }
                 if (repp =="1") creer_tache() ;
            }else{
-//-------------
        list<membre>::iterator it ;
        for( it=members.begin(); it != members.end() ; ++it )
            {
              if(varId ==(it -> get_ID()))
              {
                  if (it->get_tache() == "inconnu") it -> set_tache("") ;
-                 string newtache = it->get_tache()+" ";
+                  string newtache = it->get_tache()+" ";
+                 //on verifie si la tache n'est pas deja assignée
+                 size_t found = newtache.find(tache_nom);
+                 if (found != string::npos)
+                 {
+                    cout <<"ce membre a deja une tache de ce nom ! " <<endl;
+                    break ;
+                 }
+                 //fin de verification
+                 else {
                  newtache += tache_nom ;
                  it -> set_tache(newtache) ;
+                 }
              }
            }
    }
@@ -1628,4 +1638,41 @@ bool is_readable(const string &file)
 {
   ifstream fichier(file.c_str());
   return !fichier.fail();
+}
+void connexion()
+{
+    string login("") ;
+    string password("") ;
+    cout <<"\t\tIdentifiant : ";
+    getline(cin, login);
+    cout <<"\t\tMot de passe : " ;
+    int x[200] ;
+for(int i=0; i<200;i++)
+{
+x[i]=getch();
+if(x[i]!='\r')
+    cout<<"*";
+if(x[i]=='\r')
+break;
+ else if(x[i]=='\b')
+{
+if(i==0)
+cout<<"\b"<<" "<<"\b";
+else if(i>=1)
+{
+//x[i-1]='\0';
+ i=i-2;
+cout<<"\b"<<" "<<"\b\b"<<" "<<"\b";
+ }
+}
+password +=x[i] ;
+}
+cout <<endl ;
+if(login != "admin" || password != "toto")
+{
+    tentative -- ;
+    cout<<endl ;
+    cout << "echec de la connexion . utilisateur ou mot de passe incorrect ! il vous reste "<<tentative<<" tentative(s) \n"<<endl ;
+    if (tentative == 0) {failed_login =false ; exit(0); } ;
+}else failed_login =false ;
 }
